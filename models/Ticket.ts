@@ -43,6 +43,6 @@ const Ticket = sequelize.define<TicketInstance>('Ticket', {
     tableName: 'Tickets'
 });
 
-Ticket.sync({ alter: true })
+Ticket.sync()
 
 export default Ticket;

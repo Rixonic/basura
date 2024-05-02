@@ -15,8 +15,8 @@ export const AdminNavbar = () => {
         <AppBar position="fixed" >
             <Toolbar >
                     <Link display='flex' alignItems="baseline" href='/'>
-                        <Typography variant='h6'>Ingenieria |</Typography>
-                        <Typography sx={{ ml: 0.5 }}>HSJD</Typography>
+                        <Typography variant='h6'>Mantenimiento |</Typography>
+                        <Typography sx={{ ml: 0.5 }}>Mariano y Luciano de la Vega</Typography>
                     </Link>  
 
                 <Box flex={ 1 } />

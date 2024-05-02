@@ -42,7 +42,7 @@ const EquipmentsPage = () => {
 
   const onRegisterForm = async (data: FormData) => {
     try {
-      const response = await axios.post('/api/tickets', data);
+      const response = await axios.post('https://s96xk5tt-4040.brs.devtunnels.ms/api/tickets', data);
       console.log(response.data);
     } catch (error) {
       console.error('Error al enviar los datos:', error);
@@ -121,7 +121,7 @@ const EquipmentsPage = () => {
       label: 'Prioridad',
       description: (
         <>
-          <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
+          <FormLabel id="demo-row-radio-buttons-group-label">Prioridad</FormLabel>
           <RadioGroup
             row
             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -170,14 +170,14 @@ const EquipmentsPage = () => {
                           onClick={handleNext}
                           sx={{ mt: 1, mr: 1 }}
                         >
-                          Finish
+                          Terminar
                         </Button>) : (
                         <Button
                           variant="contained"
                           onClick={handleNext}
                           sx={{ mt: 1, mr: 1 }}
                         >
-                          Continue
+                          Continuar
                         </Button>)}
 
                       <Button
@@ -185,7 +185,7 @@ const EquipmentsPage = () => {
                         onClick={handleBack}
                         sx={{ mt: 1, mr: 1 }}
                       >
-                        Back
+                        Atras
                       </Button>
                     </div>
                   </Box>
@@ -196,9 +196,9 @@ const EquipmentsPage = () => {
         </form>
         {activeStep === steps.length && (
           <Paper square elevation={0} sx={{ p: 3 }}>
-            <Typography>All steps completed - you&apos;re finished</Typography>
+            <Typography>Su solicitud a sido creada</Typography>
             <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-              Reset
+              Cargar nueva solicitud
             </Button>
           </Paper>
         )}

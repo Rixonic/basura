@@ -67,9 +67,10 @@ export const SideMenu = () => {
                                 </ListItem>
                             )
                             : (
+
                                 <ListItem
                                     button
-                                    onClick={() => navigateTo(`/auth/login?p=${router.asPath}`)}
+                                    onClick={() => navigateTo(`/`)}
                                 >
                                     <ListItemIcon>
                                         <VpnKeyOutlined />
@@ -84,6 +85,7 @@ export const SideMenu = () => {
                         <>
                             <Divider variant="middle" />
                             <ListSubheader>Accesos</ListSubheader>
+                            {/*}
                             <ListItem
                                 button
                                 onClick={() => navigateTo('/equipamiento')}>
@@ -109,6 +111,7 @@ export const SideMenu = () => {
                                 </ListItemIcon>
                                 <ListItemText primary={'Tickets'} />
                             </ListItem>
+                    */}
                         </>
                     }
                     {/* Admin */}

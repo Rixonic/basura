@@ -47,19 +47,19 @@ export const Navbar = () => {
 
                 <Box flex={ 1 } />
 
-                {/* Pantallas pequeñas */}
+                {/* Pantallas pequeñas 
                 <IconButton
                     sx={{ display: { xs: 'flex', sm: 'none' } }}
                     onClick={ toggleSideMenu }
                 >
                     <SearchOutlined />
                 </IconButton>
-
+*/}
 
 
                 <Link display='flex' alignItems="baseline" href='/'>
-                        <Typography variant='h6'>Ingenieria |</Typography>
-                        <Typography sx={{ ml: 0.5 }}>HSJD</Typography>
+                        <Typography variant='h6'>Mantenimiento |</Typography>
+                        <Typography sx={{ ml: 0.5 }}>MyLV</Typography>
                     </Link>  
 
 

@@ -7,6 +7,9 @@ cloudinary.config( process.env.CLOUDINARY_URL || '' );
 import { db } from '../../database';
 import { ITicket } from '../../interfaces/tickets';
 import { Ticket } from '../../models';
+import { templateConstance } from '../../utils/templates/template';
+import puppeteer from 'puppeteer';
+import fs from 'fs';
 
 type Data = 
 | { message: string }
@@ -57,8 +60,11 @@ const createTickets = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
     console.log(req.body)
     try {
         const ticket = await Ticket.create(req.body);
-        await ticket.save(); 
-        sendMail(ticket)
+        const response = await ticket.save(); 
+        console.log(response)
+        const pdfBuffer = await generatePDF(ticket)
+        sendMail(pdfBuffer,"gomeznatalia@outlook.com")
+        sendMailNotification(ticket.email)
         res.status(201).json( ticket );
     } catch (error) {
         console.log(error);
@@ -68,7 +74,7 @@ const createTickets = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
 }
 
 
-const sendMail = async (body) => {
+const sendMail = async (pdfBuffer,destination) => {
     try {
       const transporter = nodemailer.createTransport({
         service: 'Gmail', // Cambia esto al servicio de correo que desees usar
@@ -80,9 +86,15 @@ const sendMail = async (body) => {
   
       const mailOptions = {
         from: 'frank4notification@gmail.com',
-        to: 'franco.j.cejas@gmail.com',
+        to: destination,
         subject: 'Nuevo ticket creado',
         text: `Se ha creado un nuevo ticket`,
+        attachments: [
+          {
+              filename: 'example.pdf', // Nombre del archivo adjunto
+              content: pdfBuffer, // Contenido del PDF en forma de buffer
+          }
+      ]
       };
   
       const info = await transporter.sendMail(mailOptions);
@@ -92,3 +104,70 @@ const sendMail = async (body) => {
   };
 
 
+  const sendMailNotification = async (destination) => {
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail', // Cambia esto al servicio de correo que desees usar
+        auth: {
+          user: 'frank4notification@gmail.com', // Tu dirección de correo electrónico
+          pass: 'vcwc pgkz nmas oovf', // Tu contraseña de correo electrónico
+        },
+      });
+  
+      const mailOptions = {
+        from: 'frank4notification@gmail.com',
+        to: destination,
+        subject: 'Nueva solicitud creada',
+        text: `Su solicitud ha sido creada`,
+      };
+  
+      const info = await transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.error('Error al enviar el correo electrónico:', error);
+    }
+  };
+
+  
+  // Función para convertir una imagen a base64
+  function imageToBase64(imagePath) {
+      const image = fs.readFileSync(imagePath);
+      return Buffer.from(image).toString('base64');
+  }
+  
+  const generatePDF = async  (body) => {
+  
+      // Reemplazar variables en la plantilla con valores del cuerpo de la solicitud
+      const replacedHtml = templateConstance.replace(/{{\s*([^}]+)\s*}}/g, (match, variable) => {
+          return body[variable.trim()] || '';
+      });
+  
+      try {
+          const browser = await puppeteer.launch();
+          const page = await browser.newPage();
+  
+          // Convertir las imágenes a base64
+          const logoBase64 = imageToBase64(`C:\\signature\\logoSJD.png`);
+  
+          // Reemplazar las rutas de las imágenes con las bases64 en la plantilla HTML
+          const htmlWithBase64Images = replacedHtml
+              .replace('./Logo Hospital San Juan de Dios -Original-.png', `data:image/png;base64,${logoBase64}`)
+  
+          await page.goto('about:blank');
+          await page.setContent(htmlWithBase64Images, { waitUntil: 'domcontentloaded' });
+  
+          // Generar el PDF
+          const pdfBuffer = await page.pdf({
+              format: 'A4',
+              printBackground: true
+          });
+  
+          await browser.close();
+  
+          // Enviar el PDF como respuesta
+
+          return (pdfBuffer);
+      } catch (error) {
+          console.error('Error generando el PDF:', error);
+
+      }
+  };

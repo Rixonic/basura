@@ -34,6 +34,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-around;
+            height: 100%;
         }
 
         .textContainer {
@@ -65,7 +67,6 @@
         h4 {
             flex: 1;
             border-bottom: 1px solid black;
-            /* Línea de subrayado */
             height: 42px;
             text-align: center;
             margin-left: 14px;
@@ -82,7 +83,7 @@
         <div style="display: flex; flex-direction: row;width: 100%; justify-content: space-between;align-items: center;">
             <img src="./Logo Hospital San Juan de Dios -Original-.png" width="248px" height="auto" />
             <div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: end;">
-                <p style="font-size: 11pt; font-weight: bold;">Dpto. INGENIERIA</p>
+                <p style="font-size: 11pt; font-weight: bold;">Dpto. MANTENIMIENTO</p>
                 <p style="font-size: 9pt; font-weight: bold;">MANTENIMIENTO Y HOTELERIA</p>
                 <p style="font-size: 9pt; color: blue; text-decoration: underline; font-weight: bold;">
                 </p>
@@ -96,34 +97,36 @@
 
 
 
-    <main style="display: flex;align-content: space-around; gap: 100px;">
-        <h1 style="font-size: 12pt; padding-top: 32px; padding-bottom: 32px;">ORDEN DE TRABAJO</h1>
+    <main >
+        <h1 style="font-size: 12pt; padding-top: 32px; padding-bottom: 32px;">ORDEN DE TRABAJO N° {{_id}}</h1>
 
-        <table border="1">
+        <table border="1" style="width: auto; align-self: flex-end; margin-right: 10%;">
             <thead>
-                <tr>
-                    <th>SERVICIO SOLICITANTE</th>
-                    <th>PRIORIDAD DE LA SOLICITUD</th>
+                <tr style="height: 40px;">
+                    <th style="width: 125px;">SERVICIO SOLICITANTE</th>
+                    <th style="width: 125px;">SUB SECTOR</th>
+                    <th style="width: 125px;">PRIORIDAD DE LA SOLICITUD</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th>solicitante</th>
-                    <th>priority</th>
+                <tr style="height: 50px;">
+                    <th>{{sector}}</th>
+                    <th>{{sub-sector}}</th>
+                    <th>{{priority}}</th>
                 </tr>
             </tbody>
         </table>
 
         <table border="1" style="width: 80%;">
             <thead>
-                <tr>
+                <tr style="height: 40px;">
                     <th>PERSONAL ASIGNADO</th>
                     <th>FECHA DE ASISTENCIA</th>
                     <th>HORA DE ASISTENCIA</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr style="height: 50px;">
                     <th></br></th>
                     <th></th>
                     <th></th>
@@ -133,50 +136,68 @@
 
         <table border="1" style="width: 80%;">
             <thead>
-                <tr>
+                <tr style="height: 50px;">
                     <th>DESCRIPCION DE SOLICITUD</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th>description</th>
+                <tr style="height: 150px;">
+                    <th style="height: auto; align-content: baseline;text-align: left; padding: 10px;">{{description}}</th>
                 </tr>
             </tbody>
         </table>
 
         <table border="1" style="width: 80%;">
             <thead>
-                <tr>
-                    <th>DESCRIPCION DE SOLICITUD</th>
+                <tr style="height: 50px;">
+                    <th colspan="6">DESCRIPCION DE SOLICITUD</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th>description</th>
+                <tr style="height: 30px;">
+                    <th>TAREA O FALLA</th>
+                    <th style="width: 30px;"></th>
+                    <th >FALLA OBSERVADA Y SOLUCION</th>
+                    <th style="width: 30px;"></th>
+                    <th>REQUIERE REPUESTOS/INSUMOS</th>
+                    <th style="width: 30px;"></th>
+                </tr>
+                <tr style="height: 30px;">
+                    <th colspan="6"></th>
+                </tr>
+                <tr style="height: 30px;">
+                    <th colspan="6"></th>
+                </tr>
+                <tr style="height: 30px;">
+                    <th colspan="6"></th>
+                </tr>
+                <tr style="height: 30px;">
+                    <th colspan="6"></th>
+                </tr>
+                <tr style="height: 30px;">
+                    <th colspan="6"></th>
                 </tr>
             </tbody>
         </table>
 
         <table border="1" style="width: 80%;">
             <thead>
-                <tr>
-                    <th>FIRMA Y ACLARACION CONFORMIDAD DEL SERVICIO</th>
-                    <th>FIRMA Y ACLARACION RESPONSABLE DEL TRABAJO</th>
+                <tr style="height: 30px;">
+                    <th style="width: 50%;">FIRMA Y ACLARACION CONFORMIDAD DEL SERVICIO</th>
+                    <th style="width: 50%;">FIRMA Y ACLARACION RESPONSABLE DEL TRABAJO</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th>description</th>
-                    <th>description</th>
+                <tr style="height: 50px;">
+                    <th></th>
+                    <th></th>
                 </tr>
             </tbody>
         </table>
 
     </main>
-    <footer style="text-align: center; padding-top: 80px;">
-        <h6 style="font-weight: normal; font-size: 8pt;"><span>GT-F-08</span> Revisión: 01 F.E: 25/07/2019
-            <span>Elaboró:</span> Analista GT <span>Revisó:</span>
-            Coord. de Calidad <span>Aprobó: Líder GT</span></h6>
+    <footer style="text-align: center;height: 10px;">
+        
     </footer>
 </body>
 
