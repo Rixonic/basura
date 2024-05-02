@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <base href="/utils/templates/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constancia de servicio</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: Calibri;
+            font-size: 10pt;
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 3cm;
+            padding: 24px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .textContainer {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+        }
+
+        h5 {
+            font-size: 8pt;
+            font-weight: bold;
+            text-align: center;
+            padding: 16px;
+        }
+
+        h5,
+        h6,
+        h2,
+        h3 {
+            font-style: italic;
+        }
+
+        span {
+            font-weight: bold;
+            font-size: 8pt;
+        }
+
+        h4 {
+            flex: 1;
+            border-bottom: 1px solid black;
+            /* Línea de subrayado */
+            height: 42px;
+            text-align: center;
+            margin-left: 14px;
+            vertical-align: bottom;
+            font-size: 22pt;
+            font-weight: normal;
+        }
+    </style>
+</head>
+
+<body
+    style="width: 21cm;height: 29.7cm;border: 1px solid black;display: flex;flex-direction: column;justify-content: space-between;">
+    <header>
+        <div style="display: flex; flex-direction: row;width: 100%; justify-content: space-between;align-items: center;">
+            <img src="./Logo Hospital San Juan de Dios -Original-.png" width="248px" height="auto" />
+            <div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: end;">
+                <p style="font-size: 11pt; font-weight: bold;">Dpto. INGENIERIA</p>
+                <p style="font-size: 9pt; font-weight: bold;">MANTENIMIENTO Y HOTELERIA</p>
+                <p style="font-size: 9pt; color: blue; text-decoration: underline; font-weight: bold;">
+                </p>
+            </div>
+        </div>
+        <div style="display: flex; width: 100%; ">
+            <hr style="border: 5px solid #00b0f0;width: 15%;">
+            <hr style="border: 5px solid #285182;width: 85%;">
+        </div>
+    </header>
+
+
+
+    <main style="display: flex;align-content: space-around; gap: 100px;">
+        <h1 style="font-size: 12pt; padding-top: 32px; padding-bottom: 32px;">ORDEN DE TRABAJO</h1>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>SERVICIO SOLICITANTE</th>
+                    <th>PRIORIDAD DE LA SOLICITUD</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>solicitante</th>
+                    <th>priority</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <table border="1" style="width: 80%;">
+            <thead>
+                <tr>
+                    <th>PERSONAL ASIGNADO</th>
+                    <th>FECHA DE ASISTENCIA</th>
+                    <th>HORA DE ASISTENCIA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th></br></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tbody>
+        </table>
+
+        <table border="1" style="width: 80%;">
+            <thead>
+                <tr>
+                    <th>DESCRIPCION DE SOLICITUD</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>description</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <table border="1" style="width: 80%;">
+            <thead>
+                <tr>
+                    <th>DESCRIPCION DE SOLICITUD</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>description</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <table border="1" style="width: 80%;">
+            <thead>
+                <tr>
+                    <th>FIRMA Y ACLARACION CONFORMIDAD DEL SERVICIO</th>
+                    <th>FIRMA Y ACLARACION RESPONSABLE DEL TRABAJO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>description</th>
+                    <th>description</th>
+                </tr>
+            </tbody>
+        </table>
+
+    </main>
+    <footer style="text-align: center; padding-top: 80px;">
+        <h6 style="font-weight: normal; font-size: 8pt;"><span>GT-F-08</span> Revisión: 01 F.E: 25/07/2019
+            <span>Elaboró:</span> Analista GT <span>Revisó:</span>
+            Coord. de Calidad <span>Aprobó: Líder GT</span></h6>
+    </footer>
+</body>
+
+</html>
