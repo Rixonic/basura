@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
-import { FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, TextField } from '@mui/material';
+import { FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, TextField,Stack, FormControl } from '@mui/material';
 import axios from 'axios';
 
 
@@ -19,6 +19,7 @@ type FormData = {
   name: string;
   description: string;
   sector: string;
+  subSector: string;
   priority: string;
 };
 
@@ -27,6 +28,11 @@ type FormData = {
 const EquipmentsPage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const [selectedValue, setSelectedValue] = React.useState('BAJO');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedValue(event.target.value);
+  };
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -41,8 +47,9 @@ const EquipmentsPage = () => {
   };
 
   const onRegisterForm = async (data: FormData) => {
+    console.log(data)
     try {
-      const response = await axios.post('https://s96xk5tt-4040.brs.devtunnels.ms/api/tickets', data);
+      const response = await axios.post('http://localhost:4040/api/tickets', data);
       console.log(response.data);
     } catch (error) {
       console.error('Error al enviar los datos:', error);
@@ -55,7 +62,7 @@ const EquipmentsPage = () => {
     {
       label: 'Ingrese sus datos',
       description: (
-        <>
+        <Stack direction="column" spacing={2}>
           <TextField
             label="Nombre"
             variant="filled"
@@ -74,13 +81,13 @@ const EquipmentsPage = () => {
               minLength: { value: 2, message: 'Mínimo 2 caracteres' }
             })}
           />
-        </>
+        </Stack>
       ),
     },
     {
       label: 'Servicio solicitante',
       description: (
-        <>
+        <Stack direction="column" spacing={2}>
           <TextField
             type="text"
             label="Sector"
@@ -92,19 +99,46 @@ const EquipmentsPage = () => {
               required: 'Este campo es requerido'
             })}
           >
-            <MenuItem value="RRHH" > RRHH </MenuItem>
-            <MenuItem value="UTI" > UTI </MenuItem>
-            <MenuItem value="NEO" > NEO </MenuItem>
-            <MenuItem value="IMAGENES" > IMAGENES </MenuItem>
-            <MenuItem value="SISTEMAS" > SISTEMAS </MenuItem>
+            <MenuItem value="NEONATOLOGIA" > Neonatologia </MenuItem>
+            <MenuItem value="UNIDAD CORONARIA" > Unidad Coronaria </MenuItem>
+            <MenuItem value="TERAPIA INTENSIVA" > Terapia Intensiva </MenuItem>
+            <MenuItem value="CUIDADOS INTERMEDIOS" > Cuidados Intermedios </MenuItem>
+            <MenuItem value="CUIDADOS MINIMOS/PEDIATRIA" > Cuidados Minimos/Pediatria </MenuItem>
+            <MenuItem value="MATERNIDAD" > Maternidad </MenuItem>
+            <MenuItem value="ESTERILIZACION" > Esterilizacion </MenuItem>
+            <MenuItem value="PARTOS" > Partos </MenuItem>
+            <MenuItem value="QUIROFANOS" > Quirofanos </MenuItem>
+            <MenuItem value="ANATOMIA PATOLOGICA" > Anatomia Patologica </MenuItem>
+            <MenuItem value="HEMOTERAPIA" > Hemoterapia </MenuItem>
+            <MenuItem value="LABORATORIO" > Laboratorio </MenuItem>
+            <MenuItem value="KINESIOLOGIA" > Kinesiologia </MenuItem>
+            <MenuItem value="DIAGNOSTICO POR IMAGENES" > Diagnostico por Imagenes </MenuItem>
+            <MenuItem value="CONSULTORIOS EXTERNOS" > Consultorios Externos </MenuItem>
+            <MenuItem value="GUARDIA ADULTOS" > Guardia Adultos </MenuItem>
+            <MenuItem value="GUARDIAS" > Guardias </MenuItem>
+            <MenuItem value="LAVADERO" > Lavadero </MenuItem>
+            <MenuItem value="GENERAL" > General </MenuItem>
+            <MenuItem value="OTROS" > Otros </MenuItem>
           </TextField>
-        </>
+
+          <TextField
+            type="text"
+            label="Sub Sector"
+            variant="filled"
+            fullWidth
+            defaultValue=""
+            {...register('subSector', {
+              required: 'Este campo es requerido'
+            })}
+          />
+        </Stack>
+        
       ),
     },
     {
       label: 'Descripcion',
       description: (
-        <>
+        <Stack direction="column" spacing={2}>
           <TextField
             label="Nombre"
             variant="filled"
@@ -114,28 +148,36 @@ const EquipmentsPage = () => {
               minLength: { value: 2, message: 'Mínimo 2 caracteres' }
             })}
           />
-        </>
+        </Stack>
       ),
     },
     {
       label: 'Prioridad',
       description: (
-        <>
-          <FormLabel id="demo-row-radio-buttons-group-label">Prioridad</FormLabel>
-          <RadioGroup
-            row
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            name="row-radio-buttons-group"
-            {...register('priority', {
-              required: 'Este campo es requerido',
-              minLength: { value: 2, message: 'Mínimo 2 caracteres' }
-            })}
-          >
-            <FormControlLabel value="ALTO" control={<Radio />} label="Alto" />
-            <FormControlLabel value="MEDIO" control={<Radio />} label="Medio" />
-            <FormControlLabel value="BAJO" control={<Radio />} label="Bajo" />
-          </RadioGroup>
-        </>
+        <Stack direction="row" spacing={2}>
+          <Radio
+            checked={selectedValue === 'a'}
+            onChange={handleChange}
+            value="a"
+            name="radio-buttons"
+            inputProps={{ 'aria-label': 'A' }}
+          />
+          <Radio
+            checked={selectedValue === 'b'}
+            onChange={handleChange}
+            aria-label='asdasd'
+            value="b"
+            name="radio-buttons"
+            inputProps={{ 'aria-label': 'B' }}
+          />
+                    <Radio
+            checked={selectedValue === 'b'}
+            onChange={handleChange}
+            value="b"
+            name="radio-buttons"
+            inputProps={{ 'aria-label': 'B' }}
+          />
+        </Stack>
       ),
     },
   ];

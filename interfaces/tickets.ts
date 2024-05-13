@@ -5,6 +5,7 @@ export interface ITicket {
     name: string;
     description: string;
     sector: string;
+    subSector: string;
     priority: string;
   }
 

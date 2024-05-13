@@ -34,7 +34,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-around;
+            justify-content: space-between;
             height: 100%;
         }
 
@@ -80,7 +80,7 @@
 <body
     style="width: 21cm;height: 29.7cm;border: 1px solid black;display: flex;flex-direction: column;justify-content: space-between;">
     <header>
-        <div style="display: flex; flex-direction: row;width: 100%; justify-content: space-between;align-items: center;">
+        <div style="display: flex; flex-direction: row;width: 90%; justify-content: space-between;align-items: center;">
             <img src="./Logo Hospital San Juan de Dios -Original-.png" width="248px" height="auto" />
             <div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: end;">
                 <p style="font-size: 11pt; font-weight: bold;">Dpto. MANTENIMIENTO</p>
@@ -89,47 +89,41 @@
                 </p>
             </div>
         </div>
-        <div style="display: flex; width: 100%; ">
-            <hr style="border: 5px solid #00b0f0;width: 15%;">
-            <hr style="border: 5px solid #285182;width: 85%;">
-        </div>
+
     </header>
 
 
+    <div style="display: flex; width: 90%; padding-top: 30px; padding-bottom: 10px; margin: auto; ">
+        <hr style="border: 5px solid #00b0f0;width: 15%;">
+        <hr style="border: 5px solid #285182;width: 85%;">
+    </div>
 
     <main >
         <h1 style="font-size: 12pt; padding-top: 32px; padding-bottom: 32px;">ORDEN DE TRABAJO N° {{_id}}</h1>
 
-        <table border="1" style="width: auto; align-self: flex-end; margin-right: 10%;">
+        <table border="1" style="width: 80%; align-self: flex-end; margin-right: 10%;">
             <thead>
                 <tr style="height: 40px;">
-                    <th style="width: 125px;">SERVICIO SOLICITANTE</th>
+                    <th >SERVICIO <br> SOLICITANTE</th>
+                    <th colspan="5" style="font-weight: normal;" >{{sector}}</th>
+                </tr>
+                <tr style="height: 40px;">
+                    <th style="width: 125px;">RESPONSABLE DE LA SOLICITUD</th>
                     <th style="width: 125px;">SUB SECTOR</th>
-                    <th style="width: 125px;">PRIORIDAD DE LA SOLICITUD</th>
+                    <th style="width: 80px;">PRIORIDAD</th>
+                    <th style="width: 125px;">PERSONAL <br> ASIGNADO</th>
+                    <th style="width: 85px;">FECHA DE ASISTENCIA</th>
+                    <th style="width: 85px;">HORA DE ASISTENCIA</th>
                 </tr>
             </thead>
             <tbody>
-                <tr style="height: 50px;">
-                    <th>{{sector}}</th>
-                    <th>{{sub-sector}}</th>
-                    <th>{{priority}}</th>
-                </tr>
-            </tbody>
-        </table>
-
-        <table border="1" style="width: 80%;">
-            <thead>
-                <tr style="height: 40px;">
-                    <th>PERSONAL ASIGNADO</th>
-                    <th>FECHA DE ASISTENCIA</th>
-                    <th>HORA DE ASISTENCIA</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr style="height: 50px;">
-                    <th></br></th>
-                    <th></th>
-                    <th></th>
+                <tr style="margin-top: 100px;">
+                    <th colspan="1" style="padding-top:10px;padding-bottom:10px;font-weight: normal;">{{name}}</th>
+                    <th colspan="1" style="padding-top:10px;padding-bottom:10px;font-weight: normal;">{{subSector}}</th>
+                    <th colspan="1" style="padding-top:10px;padding-bottom:10px;font-weight: normal;">{{priority}}</th>
+                    <th colspan="1" style="padding-top:10px;padding-bottom:10px;font-weight: normal;"></th>
+                    <th colspan="1" style="padding-top:10px;padding-bottom:10px;font-weight: normal;"></th>
+                    <th colspan="1" style="padding-top:10px;padding-bottom:10px;font-weight: normal;"></th>
                 </tr>
             </tbody>
         </table>
@@ -196,7 +190,7 @@
         </table>
 
     </main>
-    <footer style="text-align: center;height: 10px;">
+    <footer style="text-align: center;height: 40px;">
         
     </footer>
 </body>

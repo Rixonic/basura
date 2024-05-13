@@ -63,7 +63,7 @@ const createTickets = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
         const response = await ticket.save(); 
         console.log(response)
         const pdfBuffer = await generatePDF(ticket)
-        sendMail(pdfBuffer,"gomeznatalia@outlook.com")
+        sendMail(pdfBuffer,"franco.j.cejas@gmail.com","OT"+ticket._id+".pdf")
         sendMailNotification(ticket.email)
         res.status(201).json( ticket );
     } catch (error) {
@@ -74,7 +74,7 @@ const createTickets = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
 }
 
 
-const sendMail = async (pdfBuffer,destination) => {
+const sendMail = async (pdfBuffer,destination,filename) => {
     try {
       const transporter = nodemailer.createTransport({
         service: 'Gmail', // Cambia esto al servicio de correo que desees usar
@@ -91,7 +91,7 @@ const sendMail = async (pdfBuffer,destination) => {
         text: `Se ha creado un nuevo ticket`,
         attachments: [
           {
-              filename: 'example.pdf', // Nombre del archivo adjunto
+              filename: filename || 'OT.pdf',
               content: pdfBuffer, // Contenido del PDF en forma de buffer
           }
       ]

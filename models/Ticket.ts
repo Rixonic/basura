@@ -39,6 +39,10 @@ const Ticket = sequelize.define<TicketInstance>('Ticket', {
         type: DataTypes.STRING,
         allowNull: true
     },
+    subSector: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
 }, {
     tableName: 'Tickets'
 });
