@@ -10,10 +10,9 @@ type Data =
 | {
     token: string;
     user: {
-        email: string;
+        username: string;
         name: string;
         role: string;
-        sector: string;
     }
 }
 
@@ -47,22 +46,21 @@ const checkJWT = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
 
     await db.connect();
-    const user = await User.findById( userId ).lean();
+    const user = await User.findOne( {where:{username:req.body.username}} );
     await db.disconnect();
 
     if ( !user ) {
         return res.status(400).json({ message: 'No existe usuario con ese id' })
     }
 
-    const { _id, email, role, name, sector } = user;
+    const { _id, username, role, name} = user;
 
     return res.status(200).json({
-        token: jwt.signToken( _id, email ),
+        token: jwt.signToken( _id, username ),
         user: {
-            email, 
+            username,
             role, 
             name,
-            sector
         }
     })
 

@@ -1,4 +1,4 @@
-import React, { useContext, HTMLAttributes, HTMLProps, useState, useEffect } from 'react'
+import React, { useContext, HTMLAttributes, HTMLProps, useState, useEffect, useRef, ChangeEvent } from 'react'
 import { ShopLayout } from '../components/layouts'
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -9,8 +9,10 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
-import { FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, TextField,Stack, FormControl } from '@mui/material';
+import { FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, TextField, Stack, FormControl, Grid, CardMedia, Card, CardActions } from '@mui/material';
 import axios from 'axios';
+import { UploadOutlined } from '@mui/icons-material';
+import { tesloApi } from '../api';
 
 
 type FormData = {
@@ -21,15 +23,44 @@ type FormData = {
   sector: string;
   subSector: string;
   priority: string;
+  images: string[];
 };
 
 
 
 const EquipmentsPage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors }, setValue, getValues } = useForm<FormData>({
+    defaultValues: {
+      images: []
+    }
+  });
   const [selectedValue, setSelectedValue] = React.useState('BAJO');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const onFilesSelected = async ({ target }: ChangeEvent<HTMLInputElement>) => {
+    if (!target.files || target.files.length === 0) {
+      return;
+    }
 
+    try {
+      const uploadPromises = Array.from(target.files).map(async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        const { data } = await tesloApi.post<{ message: string }>(
+          "/admin/upload",
+          formData
+        );
+        return data.message;
+      });
+
+      const uploadedImages = await Promise.all(uploadPromises);
+      setValue("images", [...getValues("images"), ...uploadedImages], {
+        shouldValidate: true,
+      });
+    } catch (error) {
+      console.log({ error });
+    }
+  };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(event.target.value);
   };
@@ -45,8 +76,18 @@ const EquipmentsPage = () => {
   const handleReset = () => {
     setActiveStep(0);
   };
+  const onDeleteImage = (image: string) => {
+    setValue(
+      "images",
+      getValues("images").filter((img) => img !== image),
+      { shouldValidate: true }
+    );
+  };
 
   const onRegisterForm = async (data: FormData) => {
+    console.log("Imagenes")
+    console.log(getValues("images"))
+    data.priority = selectedValue
     console.log(data)
     try {
       const response = await axios.post('http://localhost:4040/api/tickets', data);
@@ -67,6 +108,7 @@ const EquipmentsPage = () => {
             label="Nombre"
             variant="filled"
             fullWidth
+            required
             {...register('name', {
               required: 'Este campo es requerido',
               minLength: { value: 2, message: 'Mínimo 2 caracteres' }
@@ -76,6 +118,7 @@ const EquipmentsPage = () => {
             label="Mail"
             variant="filled"
             fullWidth
+            required
             {...register('email', {
               required: 'Este campo es requerido',
               minLength: { value: 2, message: 'Mínimo 2 caracteres' }
@@ -95,6 +138,7 @@ const EquipmentsPage = () => {
             fullWidth
             select
             defaultValue=""
+            required
             {...register('sector', {
               required: 'Este campo es requerido'
             })}
@@ -127,12 +171,10 @@ const EquipmentsPage = () => {
             variant="filled"
             fullWidth
             defaultValue=""
-            {...register('subSector', {
-              required: 'Este campo es requerido'
-            })}
+            {...register('subSector')}
           />
         </Stack>
-        
+
       ),
     },
     {
@@ -140,9 +182,10 @@ const EquipmentsPage = () => {
       description: (
         <Stack direction="column" spacing={2}>
           <TextField
-            label="Nombre"
+            label="Descripcion"
             variant="filled"
             fullWidth
+            required
             {...register('description', {
               required: 'Este campo es requerido',
               minLength: { value: 2, message: 'Mínimo 2 caracteres' }
@@ -155,28 +198,106 @@ const EquipmentsPage = () => {
       label: 'Prioridad',
       description: (
         <Stack direction="row" spacing={2}>
-          <Radio
-            checked={selectedValue === 'a'}
-            onChange={handleChange}
-            value="a"
-            name="radio-buttons"
-            inputProps={{ 'aria-label': 'A' }}
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={0}
+          >
+            <Radio
+              checked={selectedValue === 'ALTO'}
+              onChange={handleChange}
+              value="ALTO"
+              name="radio-buttons"
+              inputProps={{ 'aria-label': 'A' }}
+            />
+            <Typography>Alto</Typography>
+          </Stack>
+
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={0}
+          >
+            <Radio
+              checked={selectedValue === 'MEDIO'}
+              onChange={handleChange}
+              aria-label='asdasd'
+              value="MEDIO"
+              name="radio-buttons"
+              inputProps={{ 'aria-label': 'B' }}
+            />
+            <Typography>Medio</Typography>
+          </Stack>
+
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={0}
+          >
+            <Radio
+              checked={selectedValue === 'BAJO'}
+              onChange={handleChange}
+              value="BAJO"
+              name="radio-buttons"
+              inputProps={{ 'aria-label': 'B' }}
+            />
+            <Typography>Bajo</Typography>
+          </Stack>
+
+        </Stack>
+      ),
+    },
+    {
+      label: 'Imagen',
+      description: (
+        <Stack direction="column" spacing={2}>
+          <Button
+            color="secondary"
+            fullWidth
+            startIcon={<UploadOutlined />}
+            sx={{ mb: 3 }}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Cargar imagen
+          </Button>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            //multiple
+            accept="image/png, image/gif, image/jpeg"
+            style={{ display: "none" }}
+            onChange={onFilesSelected}
           />
-          <Radio
-            checked={selectedValue === 'b'}
-            onChange={handleChange}
-            aria-label='asdasd'
-            value="b"
-            name="radio-buttons"
-            inputProps={{ 'aria-label': 'B' }}
-          />
-                    <Radio
-            checked={selectedValue === 'b'}
-            onChange={handleChange}
-            value="b"
-            name="radio-buttons"
-            inputProps={{ 'aria-label': 'B' }}
-          />
+          <Grid container spacing={2}>
+            {getValues("images") && getValues("images").map((img) => (
+              <Grid item xs={8} sm={8} key={img}>
+                <Card>
+                  <CardMedia
+                    component="img"
+                    className="fadeIn"
+                    image={img}
+                    alt={img}
+                  />
+                  <CardActions>
+                    <Button
+                      fullWidth
+                      color="error"
+                      onClick={() => onDeleteImage(img)}
+                    >
+                      Borrar
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+
+            ))}
+          </Grid>
+          {
+          }
         </Stack>
       ),
     },

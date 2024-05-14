@@ -70,7 +70,7 @@ export const SideMenu = () => {
 
                                 <ListItem
                                     button
-                                    onClick={() => navigateTo(`/`)}
+                                    onClick={() => navigateTo(`/auth/login?p=/`)}
                                 >
                                     <ListItemIcon>
                                         <VpnKeyOutlined />
@@ -80,113 +80,26 @@ export const SideMenu = () => {
                             )
                     }
 
-                    {
-
-                        <>
-                            <Divider variant="middle" />
-                            <ListSubheader>Accesos</ListSubheader>
-                            {/*}
-                            <ListItem
-                                button
-                                onClick={() => navigateTo('/equipamiento')}>
-                                <ListItemIcon>
-                                    <CategoryOutlined />
-                                </ListItemIcon>
-                                <ListItemText primary={'Equipos'} />
-                            </ListItem>
-
-                            <ListItem
-                                button
-                                onClick={() => navigateTo('/dosimetros')}>
-                                <ListItemIcon>
-                                    <CategoryOutlined />
-                                </ListItemIcon>
-                                <ListItemText primary={'Dosimetros'} />
-                            </ListItem>
-                            <ListItem
-                                button
-                                onClick={() => navigateTo('/tickets')}>
-                                <ListItemIcon>
-                                    <ConfirmationNumberOutlined />
-                                </ListItemIcon>
-                                <ListItemText primary={'Tickets'} />
-                            </ListItem>
-                    */}
-                        </>
-                    }
+               
                     {/* Admin */}
                     {
-                        user?.locations?.includes("INGENIERIA") && (
+                        user?.role == 'ADMIN' && (
                             <>
                                 <Divider variant="middle" />
-                                <ListSubheader>Gestion tecnica</ListSubheader>
-
-
+                                <ListSubheader>ADMIN</ListSubheader>
                                 <ListItem
                                     button
-                                    onClick={() => navigateTo('/')}>
-                                    <ListItemIcon>
-                                        <DashboardOutlined />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Dashboard'} />
-                                </ListItem>
-
-                                <ListItem
-                                    button
-                                    onClick={() => navigateTo('/equipamiento')}>
-                                    <ListItemIcon>
-                                        <CategoryOutlined />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Equipos'} />
-                                </ListItem>
-
-                                <ListItem
-                                    button
-                                    onClick={() => navigateTo('/admin/requerimient')}>
-                                    <ListItemIcon>
-                                        <CategoryOutlined />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Requerimientos'} />
-                                </ListItem>
-
-                                <ListItem
-                                    button
-                                    onClick={() => navigateTo('/admin/users')}>
+                                    onClick={() => navigateTo('/admin/solicitudes')}>
                                     <ListItemIcon>
                                         <AdminPanelSettings />
                                     </ListItemIcon>
-                                    <ListItemText primary={'Usuarios'} />
+                                    <ListItemText primary={'Solicitudes'} />
                                 </ListItem>
                             </>
                         )
 
                     }
-                    {
-                        (user?.locations?.includes("LABORATORIO") || user?.locations?.includes("INGENIERIA")) && (
-                            <>
-                                <Divider variant="middle" />
-                                <ListSubheader>BMS</ListSubheader>
-                                <ListItem
-                                    button
-                                    onClick={() => navigateTo('/laboratory')}>
-                                    <ListItemIcon>
-                                        <ThermostatIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Laboratorio'} />
-                                </ListItem>
-                                {user?.locations?.includes("INGENIERIA") && 
-                                <ListItem
-                                    button
-                                    onClick={() => navigateTo('/plc_transfer')}>
-                                    <ListItemIcon>
-                                        <ThermostatIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'PLC Transferencia'} />
-                                </ListItem>
-                                }
-                            </>
-                        ) 
-                    }
+                  
                 </List>
             </Box>
         </Drawer>

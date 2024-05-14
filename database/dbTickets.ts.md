@@ -8,7 +8,7 @@ import { Op } from 'sequelize';
 export const getTicketByTicketId = async (ticketId: string): Promise<ITicket | null> => {
 
     await db.connect();
-    const ticket = await Ticket.findOne({ where: { ticketId: ticketId } });
+    const ticket = await Ticket.findOne({ where: { _id: ticketId } });
     await db.disconnect();
 
     if (!ticket) {

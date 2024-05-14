@@ -10,7 +10,7 @@ type Data =
 | {
     token: string;
     user: {
-        email: string;
+        username: string;
         name: string;
         role: string;
     }
@@ -31,7 +31,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 
 const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
     
-    const { email = '', password = '', name = '' } = req.body as { email: string, password: string, name: string };
+    const { username = '', password = '', name = '' } = req.body as {username: string, password: string, name: string };
 
     if ( password.length < 6 ) {
         return res.status(400).json({
@@ -53,7 +53,7 @@ const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
     
     
     await db.connect();
-    const user = await User.findOne({ where:{ email:email }});
+    const user = await User.findOne({ where:{ username:username }});
 
     if ( user ) {
         return res.status(400).json({
@@ -62,24 +62,20 @@ const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
     }
 
     const newUser = await User.create({
-        email: email.toLocaleLowerCase(),
         password: bcrypt.hashSync( password ),
         role: req.body.role,
         name: req.body.name,
         username: req.body.username,
-        locations: req.body.locations,
-        sede: req.body.sede,
-        sector: req.body.sector,
     });
    
     const { _id, role } = newUser;
 
-    const token = jwt.signToken( _id, email );
+    const token = jwt.signToken( _id, username );
 
     return res.status(200).json({
         token, //jwt
         user: {
-            email, 
+            username, 
             role, 
             name,
 

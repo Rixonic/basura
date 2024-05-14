@@ -26,31 +26,13 @@ const User = sequelize.define<UserInstance>('User', {
         allowNull: false,
         unique: true
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
     password: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-
     role: {
         type: DataTypes.STRING, //TECNICO - SUPERVISOR - COORDINADOR - JEFE DE DEPARTARMENTO
-
-    },
-    locations: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: false,
-    }, // Los servicios habilitados
-    sede: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: false,
-    }, // Sedes habilitadas
-    sector: {
-        type: DataTypes.STRING, // ['ingenieria','instalaciones','electromedicina','SeH','neonatologia','uti','consultorios','quirofano','imagenes','endoscopia','hemodinamia','internacion','pendiente'],
-
+        defaultValue:"ADMIN"
     }
 }, {
     tableName: 'Users'

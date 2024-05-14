@@ -7,6 +7,7 @@ export interface ITicket {
     sector: string;
     subSector: string;
     priority: string;
+    images:string[];
   }
 
 export interface IDiagonstic{

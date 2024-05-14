@@ -10,11 +10,10 @@ type Data =
 | {
     token: string;
     user: {
-        email: string;
+        username: string;
         name: string;
         role: string;
-        sector: string;
-        locations: string[]
+
     }
 }
 
@@ -33,12 +32,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 
 const loginUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
     
-    const { email = '', password = ''  } = req.body;
+    const { username = '', password = ''  } = req.body;
 
-    await db.connect();
-    const user = await User.findOne({ email });
+    //await db.connect();
+    const user = await User.findOne({where: {username:username} });
     console.log("User del get: ", user)
-    await db.disconnect();
+    //await db.disconnect();
 
     if ( !user ) {
         return res.status(400).json({ message: 'Correo o contraseña no válidos - EMAIL' })
@@ -48,14 +47,14 @@ const loginUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(400).json({ message: 'Correo o contraseña no válidos - Password' })
     }
 
-    const { sector, role, name, _id, locations } = user;
+    const {  role, name, _id} = user;
 
-    const token = jwt.signToken( _id, email );
-    console.log("Locations del get:", locations)
+    const token = jwt.signToken( _id, username );
+
     return res.status(200).json({
         token, //jwt
         user: {
-            email, role, name, sector,locations,
+           username, role, name
         }
     })
 

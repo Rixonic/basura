@@ -43,6 +43,10 @@ const Ticket = sequelize.define<TicketInstance>('Ticket', {
         type: DataTypes.STRING,
         allowNull: true
     },
+    images: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true
+    },
 }, {
     tableName: 'Tickets'
 });

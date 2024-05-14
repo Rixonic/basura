@@ -15,7 +15,7 @@ export async function middleware(req: NextRequest){
     }
 
     if (req.nextUrl.pathname.startsWith('/admin')) {
-        if (session.user.role !== 'admin') {
+        if (session.user.role !== 'ADMIN') {
             return NextResponse.redirect (new URL('/', req.url));
         }
     }
@@ -24,5 +24,5 @@ export async function middleware(req: NextRequest){
 }
 
 export const config = {
-    matcher: ['/((?!api|_next/static|auth).*)']
+    matcher: ['/admin(.*)'],
 }
