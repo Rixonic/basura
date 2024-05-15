@@ -8,9 +8,11 @@ export interface ITicket {
     subSector: string;
     priority: string;
     images:string[];
+    reciever: string;
+    dateRecieved: Date;
+    workHours: Date; 
+    executer: string;
+    status: string;
+    materials: string;
+    comments: string;
   }
-
-export interface IDiagonstic{
-    user : string;
-    observation : string;
-}

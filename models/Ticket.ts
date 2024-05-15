@@ -47,10 +47,38 @@ const Ticket = sequelize.define<TicketInstance>('Ticket', {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true
     },
+    executer: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    reciever: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    dateRecieved: {
+        type: DataTypes.DATEONLY,
+        allowNull: true
+    },
+    workHours: {
+        type: DataTypes.TIME,
+        allowNull: true
+    },
+    status: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    materials: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    comments: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
 }, {
     tableName: 'Tickets'
 });
 
-Ticket.sync()
+Ticket.sync({alter:true})
 
 export default Ticket;

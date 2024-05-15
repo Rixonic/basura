@@ -52,18 +52,30 @@ const updateTickets = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
 
 
 const createTickets = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
-    console.log(req.body)
+    
     try {
         const ticket = await Ticket.create(req.body);
         const response = await ticket.save(); 
         console.log(response)
         const pdfBuffer = await generatePDF(ticket)
-        sendMail(pdfBuffer,"franco.j.cejas@gmail.com","OT"+ticket._id+".pdf")
-        sendMailNotification(ticket.email)
-        res.status(201).json( ticket );
+        const mailToUser = await sendMailNotification(ticket.email)
+        await sendMail(pdfBuffer,"franco.j.cejas@gmail.com","OT"+ticket._id+".pdf")
+        
+        let message;
+        if (mailToUser) {
+          message = "El ticket se ha creado correctamente, le enviamos un correo con los detalles.";
+        } else {
+            message = "El ticket se ha creado correctamente, pero no se pudo enviar el correo .";
+        }
+
+
+        res.status(201).json( {message} );
+
+
+
     } catch (error) {
         console.log(error);
-        return res.status(400).json({ message: 'Revisar logs del servidor' });
+        return res.status(400).json({ message: 'Lo sentimos, pero tuvimos un problema' });
      }
 
 }
@@ -95,8 +107,10 @@ const sendMail = async (pdfBuffer,destination,filename) => {
       };
   
       const info = await transporter.sendMail(mailOptions);
+      return true;
     } catch (error) {
       console.error('Error al enviar el correo electrónico:', error);
+      return false;
     }
   };
 
@@ -121,8 +135,11 @@ const sendMail = async (pdfBuffer,destination,filename) => {
       };
   
       const info = await transporter.sendMail(mailOptions);
+
+      return true;
     } catch (error) {
       console.error('Error al enviar el correo electrónico:', error);
+      return false;
     }
   };
 

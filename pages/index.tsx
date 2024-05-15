@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { useForm } from 'react-hook-form';
-import { FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, TextField, Stack, FormControl, Grid, CardMedia, Card, CardActions } from '@mui/material';
+import { FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, TextField, Stack, FormControl, Grid, CardMedia, Card, CardActions, Snackbar, Alert, Backdrop, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { UploadOutlined } from '@mui/icons-material';
 import { tesloApi } from '../api';
@@ -29,6 +29,10 @@ type FormData = {
 
 
 const EquipmentsPage = () => {
+  const [open, setOpen] = React.useState(false);
+  const [uploading, setUploading] = React.useState(false);
+  const [message, setMessage] = React.useState("Ups!");
+  const [response, setResponse] = React.useState("Todo listo!");
   const [activeStep, setActiveStep] = React.useState(0);
   const { register, handleSubmit, formState: { errors }, setValue, getValues } = useForm<FormData>({
     defaultValues: {
@@ -65,7 +69,45 @@ const EquipmentsPage = () => {
     setSelectedValue(event.target.value);
   };
 
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+
   const handleNext = () => {
+    if (activeStep === 0) {
+      const isValid = getValues("name") && getValues("email");
+      if (!isValid) {
+        setMessage("Ingrese un nombre o un mail valido")
+        setOpen(true)
+        return; 
+      }
+    } else if (activeStep === 1) {
+      const isValid = getValues("sector"); 
+      if (!isValid) {
+        setMessage("Por favor, seleccione un sector del listado")
+        setOpen(true)
+        return; 
+      }
+
+      const isValid2 = getValues("subSector");
+      if (!isValid2) {
+        setMessage("Por favor, especifique el lugar dentro del sector")
+        setOpen(true)
+        return;
+      }
+    } else if (activeStep === 2) {
+      const isValid = getValues("description");
+      if (!isValid) {
+        setMessage("Por favor, indique la descripcion de su problema")
+        setOpen(true)
+        return;
+      }
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -85,15 +127,18 @@ const EquipmentsPage = () => {
   };
 
   const onRegisterForm = async (data: FormData) => {
-    console.log("Imagenes")
-    console.log(getValues("images"))
     data.priority = selectedValue
-    console.log(data)
+    setUploading(true)
     try {
-      const response = await axios.post('http://localhost:4040/api/tickets', data);
-      console.log(response.data);
+      const response = await axios.post('/api/tickets', data);
+      console.log(response.data.message)
+      setResponse(response.data.message)
     } catch (error) {
       console.error('Error al enviar los datos:', error);
+      setResponse("Tuvimos un problema y su solicitud no fue creada")
+    }
+    finally{
+      setUploading(false)
     }
 
   }
@@ -313,6 +358,12 @@ const EquipmentsPage = () => {
       pageDescription={''}
 
     >
+              <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={uploading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
       <Box sx={{ maxWidth: 400 }}>
         <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
           <Stepper activeStep={activeStep} orientation="vertical">
@@ -357,9 +408,9 @@ const EquipmentsPage = () => {
             ))}
           </Stepper>
         </form>
-        {activeStep === steps.length && (
+        {activeStep === steps.length && !uploading && (
           <Paper square elevation={0} sx={{ p: 3 }}>
-            <Typography>Su solicitud a sido creada</Typography>
+            <Typography>{response}</Typography>
             <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
               Cargar nueva solicitud
             </Button>
@@ -367,7 +418,21 @@ const EquipmentsPage = () => {
         )}
       </Box>
 
-
+      <Snackbar
+        anchorOrigin={{ vertical:"top", horizontal:"center" }}
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+      >
+        <Alert
+    onClose={handleClose}
+    severity="error"
+    variant="filled"
+    sx={{ width: '100%' }}
+  >
+    {message}
+  </Alert>
+  </Snackbar>
     </ShopLayout>
 
 
