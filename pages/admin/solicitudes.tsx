@@ -243,8 +243,8 @@ const EquipmentsPage = () => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          labelRowsPerPage={"Items por pagina"}
-          labelDisplayedRows={({ from, to, count }) => `Mostrando items del ${from}al ${to} de ${count} items`}
+          labelRowsPerPage={"Items por pag"}
+          labelDisplayedRows={({ from, to, count }) => `Mostrando ${from} - ${to} de ${count}`}
         />
       </Paper>
 

@@ -193,8 +193,8 @@ const sendMail = async (pdfBuffer,destination,filename,id) => {
           const page = await browser.newPage();
   
           // Convertir las imágenes a base64
-          const logoBase64 = imageToBase64(`C:\\signature\\logoSJD.png`);
-          //const logoBase64 = imageToBase64(`/var/www/`);
+          const logoBase64 = imageToBase64(process.env.IMAGE_ROUTE);
+          //const logoBase64 = imageToBase64(`/var/www/LogoMyLV.png`);
           // Reemplazar las rutas de las imágenes con las bases64 en la plantilla HTML
           const htmlWithBase64Images = replacedHtml
               .replace('./Logo Hospital San Juan de Dios -Original-.png', `data:image/png;base64,${logoBase64}`)
