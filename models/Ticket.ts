@@ -60,7 +60,7 @@ const Ticket = sequelize.define<TicketInstance>('Ticket', {
         allowNull: true
     },
     workHours: {
-        type: DataTypes.TIME,
+        type: DataTypes.DATE,
         allowNull: true
     },
     status: {

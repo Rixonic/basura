@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 
-import { db } from '../../../database';
 import { User } from '../../../models';
 import { jwt, validations } from '../../../utils';
 
@@ -52,7 +51,6 @@ const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
     }*/
     
     
-    await db.connect();
     const user = await User.findOne({ where:{ username:username }});
 
     if ( user ) {

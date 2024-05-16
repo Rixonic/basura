@@ -4,12 +4,12 @@ import nodemailer from 'nodemailer';
 import { v2 as cloudinary } from 'cloudinary';
 cloudinary.config( process.env.CLOUDINARY_URL || '' );
 
-import { db } from '../../database';
 import { ITicket } from '../../interfaces/tickets';
 import { Ticket } from '../../models';
 import { templateConstance } from '../../utils/templates/template';
 import puppeteer from 'puppeteer';
 import fs from 'fs';
+import { getEmail } from '../../database/dbConfig';
 
 type Data = 
 | { message: string }
@@ -48,6 +48,32 @@ const getTickets = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
 
 const updateTickets = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  try {
+    console.log(req.body)
+    // Verificar si el ID del ticket está presente
+    if (!req.body._id) {
+      return res.status(400).json({ message: 'El ID del ticket es necesario para la actualización' });
+    }
+
+    // Buscar el ticket en la base de datos
+    const ticket = await Ticket.findByPk(req.body._id);
+
+    // Verificar si el ticket existe
+    if (!ticket) {
+      return res.status(404).json({ message: 'El ticket no existe' });
+    }
+
+    // Actualizar el ticket con los datos de la solicitud
+    const a = await ticket.update(req.body);
+
+    //console.log(a)
+
+    // Confirmar la actualización
+    res.status(200).json({ message: 'El ticket se ha actualizado correctamente' });
+  } catch (error) {
+    console.error('Error al actualizar el ticket:', error);
+    res.status(500).json({ message: 'Se produjo un error al intentar actualizar el ticket' });
+  }
 };
 
 
@@ -56,10 +82,10 @@ const createTickets = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
     try {
         const ticket = await Ticket.create(req.body);
         const response = await ticket.save(); 
-        console.log(response)
+        const mail = await getEmail()
         const pdfBuffer = await generatePDF(ticket)
         const mailToUser = await sendMailNotification(ticket.email)
-        await sendMail(pdfBuffer,"franco.j.cejas@gmail.com","OT"+ticket._id+".pdf")
+        await sendMail(pdfBuffer,mail,"OT"+ticket._id+".pdf")
         
         let message;
         if (mailToUser) {
@@ -96,8 +122,8 @@ const sendMail = async (pdfBuffer,destination,filename) => {
       const mailOptions = {
         from: 'notificaciones@frank4.com.ar',
         to: destination,
-        subject: 'Nuevo ticket creado',
-        text: `Se ha creado un nuevo ticket`,
+        subject: 'Nueva OT creada',
+        text: `Se ha creado una nueva OT a partir de la solicitud recibida`,
         attachments: [
           {
               filename: filename || 'OT.pdf',
