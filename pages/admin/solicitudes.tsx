@@ -301,7 +301,7 @@ const EquipmentsPage = () => {
         <DialogContent>
           <TextField
             margin="dense"
-            label="Responsable"
+            label="Ejecutante"
             name="executer"
             value={selectedTicket.executer}
             onChange={handleFieldChange}
@@ -309,7 +309,7 @@ const EquipmentsPage = () => {
           />
           <TextField
             margin="dense"
-            label="Recepcionado"
+            label="Recepciona"
             name="reciever"
             value={selectedTicket.reciever}
             onChange={handleFieldChange}
