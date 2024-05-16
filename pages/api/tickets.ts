@@ -84,8 +84,8 @@ const createTickets = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
         const response = await ticket.save(); 
         const mail = await getEmail()
         const pdfBuffer = await generatePDF(ticket)
-        const mailToUser = await sendMailNotification(ticket.email)
-        await sendMail(pdfBuffer,mail,"OT"+ticket._id+".pdf")
+        const mailToUser = await sendMailNotification(ticket.email,ticket)
+        await sendMail(pdfBuffer,mail,"OT"+ticket._id+".pdf",ticket._id)
         
         let message;
         if (mailToUser) {
@@ -107,7 +107,7 @@ const createTickets = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
 }
 
 
-const sendMail = async (pdfBuffer,destination,filename) => {
+const sendMail = async (pdfBuffer,destination,filename,id) => {
     try {
       const transporter = nodemailer.createTransport({
         host: 'smtp.zoho.com',
@@ -122,7 +122,7 @@ const sendMail = async (pdfBuffer,destination,filename) => {
       const mailOptions = {
         from: 'notificaciones@frank4.com.ar',
         to: destination,
-        subject: 'Nueva OT creada',
+        subject: `Orden de trabajo N-${id} creada`,
         text: `Se ha creado una nueva OT a partir de la solicitud recibida`,
         attachments: [
           {
@@ -141,7 +141,7 @@ const sendMail = async (pdfBuffer,destination,filename) => {
   };
 
 
-  const sendMailNotification = async (destination) => {
+  const sendMailNotification = async (destination,ticket) => {
     try {
       const transporter = nodemailer.createTransport({
         host: 'smtp.zoho.com',
@@ -157,7 +157,12 @@ const sendMail = async (pdfBuffer,destination,filename) => {
         from: 'notificaciones@frank4.com.ar',
         to: destination,
         subject: 'Nueva solicitud creada',
-        text: `Su solicitud ha sido creada`,
+        text:`Su solicitud ha sido creada.:
+        Nombre del responsable: ${ticket.name}
+        Sector: ${ticket.sector}
+        Sub sector: ${ticket.subSector}
+        Descripcion: ${ticket.description}
+        Prioridad: ${ticket.priority}`,
       };
   
       const info = await transporter.sendMail(mailOptions);

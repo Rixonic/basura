@@ -31,6 +31,7 @@ type FormData = {
 const EquipmentsPage = () => {
   const [open, setOpen] = React.useState(false);
   const [uploading, setUploading] = React.useState(false);
+  const [imageUploading, setImageUploading] = React.useState(false);
   const [message, setMessage] = React.useState("Ups!");
   const [response, setResponse] = React.useState("Todo listo!");
   const [activeStep, setActiveStep] = React.useState(0);
@@ -42,6 +43,7 @@ const EquipmentsPage = () => {
   const [selectedValue, setSelectedValue] = React.useState('BAJO');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const onFilesSelected = async ({ target }: ChangeEvent<HTMLInputElement>) => {
+    setImageUploading(true)
     if (!target.files || target.files.length === 0) {
       return;
     }
@@ -63,6 +65,9 @@ const EquipmentsPage = () => {
       });
     } catch (error) {
       console.log({ error });
+    }
+    finally{
+      setImageUploading(false)
     }
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -383,6 +388,7 @@ const EquipmentsPage = () => {
                           variant="contained"
                           onClick={handleNext}
                           sx={{ mt: 1, mr: 1 }}
+                          disabled={ imageUploading}
                         >
                           Terminar
                         </Button>) : (
@@ -390,12 +396,13 @@ const EquipmentsPage = () => {
                           variant="contained"
                           onClick={handleNext}
                           sx={{ mt: 1, mr: 1 }}
+                          disabled={ imageUploading}
                         >
                           Continuar
                         </Button>)}
 
                       <Button
-                        disabled={index === 0}
+                        disabled={index === 0 || imageUploading}
                         onClick={handleBack}
                         sx={{ mt: 1, mr: 1 }}
                       >

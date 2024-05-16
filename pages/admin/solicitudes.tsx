@@ -174,7 +174,7 @@ const EquipmentsPage = () => {
         <SettingsIcon />
       </IconButton>
 
-      <Paper sx={{ width: '100%' }}>
+      <Paper sx={{ maxWidth: '100VW' }}>
         <TableContainer >
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
@@ -187,13 +187,13 @@ const EquipmentsPage = () => {
                 <TableCell align="right">Sector</TableCell>
                 <TableCell align="right">Sub Sector</TableCell>
                 <TableCell align="right">Creado el</TableCell>
-                <TableCell align="right">Mail</TableCell>
-                <TableCell align="right">Nombre</TableCell>
-                <TableCell align="right">Prioridad</TableCell>
-                <TableCell align="right">Descripcion</TableCell>
-                <TableCell align="right">Sector</TableCell>
-                <TableCell align="right">Sub Sector</TableCell>
-                <TableCell align="right">Creado el</TableCell>
+                <TableCell align="right">Fecha derivado</TableCell>
+                <TableCell align="right">Recepciona</TableCell>
+                <TableCell align="right">Ejecutante</TableCell>
+                <TableCell align="right">Hs Trabajo</TableCell>
+                <TableCell align="right">Estado</TableCell>
+                <TableCell align="right">Materiales</TableCell>
+                <TableCell align="right">Observaciones</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
@@ -214,7 +214,7 @@ const EquipmentsPage = () => {
                   <TableCell align="right">{row.dateRecieved}</TableCell>
                   <TableCell align="right">{row.reciever}</TableCell>
                   <TableCell align="right">{row.executer}</TableCell>
-                  <TableCell align="right">{format(new Date(row.workHours), 'hh:mm')}</TableCell>
+                  <TableCell align="right">{row.workHours ? format(new Date(row.workHours), 'HH:mm'):null}</TableCell>
                   <TableCell align="right">{row.status}</TableCell>
                   <TableCell align="right">{row.materials}</TableCell>
                   <TableCell align="right">{row.comments}</TableCell>
@@ -243,6 +243,8 @@ const EquipmentsPage = () => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage={"Items por pagina"}
+          labelDisplayedRows={({ from, to, count }) => `Mostrando items del ${from}al ${to} de ${count} items`}
         />
       </Paper>
 
@@ -294,7 +296,7 @@ const EquipmentsPage = () => {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={openEditDialog} onClose={handleCloseEditDialog}>
+      <Dialog open={openEditDialog} onClose={handleCloseEditDialog} fullWidth>
         <DialogTitle>Editar Ticket</DialogTitle>
         <DialogContent>
           <TextField
