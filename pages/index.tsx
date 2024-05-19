@@ -66,7 +66,7 @@ const EquipmentsPage = () => {
     } catch (error) {
       console.log({ error });
     }
-    finally{
+    finally {
       setImageUploading(false)
     }
   };
@@ -89,14 +89,14 @@ const EquipmentsPage = () => {
       if (!isValid) {
         setMessage("Ingrese un nombre o un mail valido")
         setOpen(true)
-        return; 
+        return;
       }
     } else if (activeStep === 1) {
-      const isValid = getValues("sector"); 
+      const isValid = getValues("sector");
       if (!isValid) {
         setMessage("Por favor, seleccione un sector del listado")
         setOpen(true)
-        return; 
+        return;
       }
 
       const isValid2 = getValues("subSector");
@@ -142,7 +142,7 @@ const EquipmentsPage = () => {
       console.error('Error al enviar los datos:', error);
       setResponse("Tuvimos un problema y su solicitud no fue creada")
     }
-    finally{
+    finally {
       setUploading(false)
     }
 
@@ -249,52 +249,76 @@ const EquipmentsPage = () => {
       description: (
         <Stack direction="row" spacing={2}>
           <Stack
-            direction="row"
-            justifyContent="center"
+            direction="column"
+            justifyContent="flex-start"
             alignItems="center"
             spacing={0}
           >
-            <Radio
-              checked={selectedValue === 'ALTO'}
-              onChange={handleChange}
-              value="ALTO"
-              name="radio-buttons"
-              inputProps={{ 'aria-label': 'A' }}
-            />
-            <Typography>Alto</Typography>
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={0}
+            >
+              <Radio
+                checked={selectedValue === 'ALTO'}
+                onChange={handleChange}
+                value="ALTO"
+                name="radio-buttons"
+                inputProps={{ 'aria-label': 'A' }}
+              />
+              <Typography>Alto</Typography>
+            </Stack>
+            <Typography variant='caption'>Impide el funcionamiento del servicio</Typography>
           </Stack>
-
           <Stack
-            direction="row"
-            justifyContent="center"
+            direction="column"
+            justifyContent="flex-start"
             alignItems="center"
             spacing={0}
           >
-            <Radio
-              checked={selectedValue === 'MEDIO'}
-              onChange={handleChange}
-              aria-label='asdasd'
-              value="MEDIO"
-              name="radio-buttons"
-              inputProps={{ 'aria-label': 'B' }}
-            />
-            <Typography>Medio</Typography>
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={0}
+            >
+              <Radio
+                checked={selectedValue === 'MEDIO'}
+                onChange={handleChange}
+                aria-label='asdasd'
+                value="MEDIO"
+                name="radio-buttons"
+                inputProps={{ 'aria-label': 'B' }}
+              />
+              <Typography>Medio</Typography>
+
+            </Stack>
+            <Typography variant="caption">NO impide el funcionamiento del servicio</Typography>
           </Stack>
-
           <Stack
-            direction="row"
-            justifyContent="center"
+            direction="column"
+            justifyContent="flex-start"
             alignItems="center"
             spacing={0}
           >
-            <Radio
-              checked={selectedValue === 'BAJO'}
-              onChange={handleChange}
-              value="BAJO"
-              name="radio-buttons"
-              inputProps={{ 'aria-label': 'B' }}
-            />
-            <Typography>Bajo</Typography>
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={0}
+            >
+              <Radio
+                checked={selectedValue === 'BAJO'}
+                onChange={handleChange}
+                value="BAJO"
+                name="radio-buttons"
+                inputProps={{ 'aria-label': 'B' }}
+              />
+              <Typography>Bajo</Typography>
+            </Stack>
+
+            <Typography variant='caption'>Oportunidad de mejora</Typography>
           </Stack>
 
         </Stack>
@@ -363,12 +387,12 @@ const EquipmentsPage = () => {
       pageDescription={''}
 
     >
-              <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={uploading}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={uploading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box sx={{ maxWidth: 400 }}>
         <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
           <Stepper activeStep={activeStep} orientation="vertical">
@@ -388,7 +412,7 @@ const EquipmentsPage = () => {
                           variant="contained"
                           onClick={handleNext}
                           sx={{ mt: 1, mr: 1 }}
-                          disabled={ imageUploading}
+                          disabled={imageUploading}
                         >
                           Terminar
                         </Button>) : (
@@ -396,7 +420,7 @@ const EquipmentsPage = () => {
                           variant="contained"
                           onClick={handleNext}
                           sx={{ mt: 1, mr: 1 }}
-                          disabled={ imageUploading}
+                          disabled={imageUploading}
                         >
                           Continuar
                         </Button>)}
@@ -426,20 +450,20 @@ const EquipmentsPage = () => {
       </Box>
 
       <Snackbar
-        anchorOrigin={{ vertical:"top", horizontal:"center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={open}
         autoHideDuration={2000}
         onClose={handleClose}
       >
         <Alert
-    onClose={handleClose}
-    severity="error"
-    variant="filled"
-    sx={{ width: '100%' }}
-  >
-    {message}
-  </Alert>
-  </Snackbar>
+          onClose={handleClose}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </ShopLayout>
 
 
