@@ -13,11 +13,11 @@ import { FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, TextField, St
 import axios from 'axios';
 import { UploadOutlined } from '@mui/icons-material';
 import { tesloApi } from '../api';
-
+import {QrReader} from 'react-qr-reader';
 
 type FormData = {
   //_id: string;
-  email: string;
+  binCode: string;
   name: string;
   description: string;
   sector: string;
@@ -30,11 +30,18 @@ type FormData = {
 
 const EquipmentsPage = () => {
   const [open, setOpen] = React.useState(false);
+  const [data, setData] = React.useState("");
   const [uploading, setUploading] = React.useState(false);
   const [imageUploading, setImageUploading] = React.useState(false);
   const [message, setMessage] = React.useState("Ups!");
   const [response, setResponse] = React.useState("Todo listo!");
   const [activeStep, setActiveStep] = React.useState(0);
+  const [selected, setSelected] = useState("environment");
+  const [startScan, setStartScan] = useState(false);
+  const [loadingScan, setLoadingScan] = useState(false);
+  const [binCode, setBinCode] = useState('');
+  const [scanError, setScanError] = useState(null);
+  const [scannerOpen, setScannerOpen] = useState(false);
   const { register, handleSubmit, formState: { errors }, setValue, getValues } = useForm<FormData>({
     defaultValues: {
       images: []
@@ -42,6 +49,54 @@ const EquipmentsPage = () => {
   });
   const [selectedValue, setSelectedValue] = React.useState('BAJO');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleScan = async (scanData) => {
+    setLoadingScan(true);
+    console.log(`loaded data data`, scanData);
+    if (scanData && scanData !== "") {
+      console.log(`loaded >>>`, scanData);
+      setData(scanData);
+      setStartScan(false);
+      setLoadingScan(false);
+      // setPrecScan(scanData);
+    }
+  };
+  const handleError = (err) => {
+    console.error(err);
+  };
+
+  const handleOpenScanner = () => {
+    setScannerOpen(true);
+    setScanError(null); // Limpiar cualquier error previo al abrir el scanner
+  };
+
+  useEffect(() => {
+    // Establecer la conexión WebSocket
+    const socket = new WebSocket('ws://frank4.com.ar:1880/balanza/ramos');
+
+    // Escuchar eventos desde el servidor
+    socket.addEventListener('message', (event) => {
+      //console.log('Mensaje recibido desde Node-RED:', event.data);
+      setData(event.data)
+    });
+
+    // Manejar errores de conexión
+    socket.addEventListener('error', (error) => {
+      console.error('Error en la conexión WebSocket:', error);
+    });
+
+    // Manejar la desconexión
+    socket.addEventListener('close', () => {
+      console.log('Conexión WebSocket cerrada');
+    });
+
+    // Cerrar la conexión al desmontar el componente
+    return () => {
+      socket.close();
+    };
+  }, []); // Solo se ejecuta una vez al montar el componente
+
+
   const onFilesSelected = async ({ target }: ChangeEvent<HTMLInputElement>) => {
     setImageUploading(true)
     if (!target.files || target.files.length === 0) {
@@ -85,7 +140,7 @@ const EquipmentsPage = () => {
 
   const handleNext = () => {
     if (activeStep === 0) {
-      const isValid = getValues("name") && getValues("email");
+      const isValid = getValues("name") && getValues("binCode");
       if (!isValid) {
         setMessage("Ingrese un nombre o un mail valido")
         setOpen(true)
@@ -165,15 +220,18 @@ const EquipmentsPage = () => {
             })}
           />
           <TextField
-            label="Mail"
+            label="Codigo Carro"
             variant="filled"
             fullWidth
             required
-            {...register('email', {
+            {...register('binCode', {
               required: 'Este campo es requerido',
               minLength: { value: 2, message: 'Mínimo 2 caracteres' }
             })}
           />
+            <Typography variant='caption'>Peso: </Typography>
+            {data && data}
+
         </Stack>
       ),
     },
